@@ -1,9 +1,10 @@
 import sys
 import cv2
+import os
 import numpy as np
 import torch
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton,QFileDialog, QVBoxLayout,QHBoxLayout,QFormLayout, QWidget, QMessageBox,QLineEdit,QScrollArea,QTextEdit
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtGui import QPixmap, QImage, QIcon, QPalette, QBrush
 from PyQt5.QtCore import Qt, QPoint
 from untitled1 import jsonHANDLER
 from untitled2 import aichecker
@@ -16,10 +17,14 @@ class ShapeAnnotator(QMainWindow):
         self.start_point = None
         self.shape = 'circle'
         self.shapes = []  # List to store drawn shapes
-        self.setGeometry(100, 100, 700, 2200)
+        self.setGeometry(100, 100, 700, 700)
+        self.scale_factor = 1.0  # Initialize scale factor
+        
+        self.setup_background()
         
         # Create a central widget
         self.central_widget = QWidget(self)
+        self.central_widget.setStyleSheet("background-color: rgba(255, 255, 255, 180);")  # Semi-transparent white
         self.setCentralWidget(self.central_widget)
 
         # Layouts
@@ -59,6 +64,13 @@ class ShapeAnnotator(QMainWindow):
         self.submit_button = QPushButton("Submit", self)
         self.submit_button.clicked.connect(self.submit_shape)
 
+        # Zoom buttons
+        self.zoom_in_button = QPushButton("Zoom In", self)
+        self.zoom_in_button.clicked.connect(self.zoom_in)
+
+        self.zoom_out_button = QPushButton("Zoom Out", self)
+        self.zoom_out_button.clicked.connect(self.zoom_out)
+
         # Button layout
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.circle_button)
@@ -66,6 +78,8 @@ class ShapeAnnotator(QMainWindow):
         button_layout.addWidget(self.oval_button)
         button_layout.addWidget(self.quit_button)
         button_layout.addWidget(self.submit_button)
+        button_layout.addWidget(self.zoom_in_button)
+        button_layout.addWidget(self.zoom_out_button)
 
         # Add button layout to the main layout
         self.layout1.addLayout(button_layout)
@@ -96,6 +110,32 @@ class ShapeAnnotator(QMainWindow):
         self.layout.addLayout(self.layout1)
 
         self.img = None  # Store the loaded image
+        self.original_pixmap = None  # Store the original pixmap
+
+    def setup_background(self):
+        background_path = r"C:\Users\TMpub\OneDrive\Desktop\londonbridge.jpg"
+        if not os.path.exists(background_path):
+            print(f"Error: Background image not found at {background_path}")
+            return
+
+        # Load the background image
+        background = QImage(background_path)
+        if background.isNull():
+            print(f"Error: Failed to load background image from {background_path}")
+            return
+
+        # Scale the background image to the size of the window
+        scaled_background = background.scaled(self.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
+
+        # Create a palette and set it as the window's background
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(scaled_background))
+        self.setPalette(palette)
+
+    def resizeEvent(self, event):
+        # Resize the background image when the window is resized
+        super().resizeEvent(event)
+        self.setup_background()
 
     def open_image(self):
         options = QFileDialog.Options()
@@ -114,14 +154,15 @@ class ShapeAnnotator(QMainWindow):
             # Process results
             self.process_results(results)
             self.update_image()
+
     def process_results(self, results):
-    # Get predictions
+        # Get predictions
         predictions_tensor = results.xyxy[0]  # img1 predictions (tensor)
-    
-    # Clear previous shapes
+
+        # Clear previous shapes
         self.shapes.clear()
 
-    # Draw boxes on the image and store shapes
+        # Draw boxes on the image and store shapes
         img_with_boxes = self.img.copy()  # Copy the original image for drawing
         for pred in predictions_tensor:
             xmin, ymin, xmax, ymax, conf, cls = pred.tolist()  # Convert tensor to list
@@ -145,14 +186,30 @@ class ShapeAnnotator(QMainWindow):
         # Set the processed image with bounding boxes
         self.img = img_with_boxes
 
-
     def load_image(self, file_name):
         pixmap = QPixmap(file_name)
+        self.original_pixmap = pixmap  
         self.image_label.setPixmap(pixmap)
         self.image_label.adjustSize()  # Adjust size to fit the scroll area
+        self.scale_factor = 1.0
+    
+    def zoom_in(self):
+        self.scale_image(1.25)
 
+    def zoom_out(self):
+        self.scale_image(0.8)
+
+   
+    def scale_image(self, factor):
+            if self.original_pixmap:
+                self.scale_factor *= factor
+                new_size = self.original_pixmap.size() * self.scale_factor
+                scaled_pixmap = self.original_pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                self.image_label.setPixmap(scaled_pixmap)
+                self.image_label.adjustSize()
+    
     def update_image(self):
-        """Redraw all shapes on the image and update the QLabel."""
+               
         if self.img is None:
             return
         img_copy = self.img.copy()
@@ -171,6 +228,8 @@ class ShapeAnnotator(QMainWindow):
         height, width, channel = img_copy.shape
         bytes_per_line = 3 * width
         q_img = QImage(img_copy.data, width, height, bytes_per_line, QImage.Format_BGR888)
+        pixmap = QPixmap.fromImage(q_img)
+        self.original_pixmap = pixmap  # Update the origi
         self.image_label.setPixmap(QPixmap.fromImage(q_img))
         self.image_label.adjustSize()  # Adjust size to fit the scroll area
 
@@ -228,6 +287,7 @@ class ShapeAnnotator(QMainWindow):
         height, width, channel = img_copy.shape
         bytes_per_line = 3 * width
         q_img = QImage(img_copy.data, width, height, bytes_per_line, QImage.Format_BGR888)
+        pixmap = QPixmap.fromImage(q_img)
         self.image_label.setPixmap(QPixmap.fromImage(q_img))
         self.image_label.adjustSize()  # Adjust size to fit the scroll area
 
@@ -256,4 +316,3 @@ if __name__ == '__main__':
     window = ShapeAnnotator()
     window.show()
     sys.exit(app.exec_())
-
