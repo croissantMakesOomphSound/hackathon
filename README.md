@@ -1,40 +1,61 @@
 # Coders Celtics _ Adarsh Shukla _ Tamoghna Mukherjee
-<br>
-this is hackathon related repository 
-<br>
-Project Methodology Description
-<br># Object detection using deep learning with OpenCV and Python 
+<br> Description
+ project description and implementation using PyQt5 for annotating images with shapes and integrating YOLO object detection is quite comprehensive! Here are a few suggestions and modifications to enhance clarity and functionality:
 
-OpenCV `dnn` module supports running inference on pre-trained deep learning models from popular frameworks like Caffe, Torch and TensorFlow. 
+Project Description
+Object Detection and Image Annotation Tool using PyQt5 and YOLO
+The project combines PyQt5 for creating a graphical user interface (GUI) to annotate images with shapes (circles, rectangles, ovals) and integrates YOLO object detection for automatic object detection in images.
 
-When it comes to object detection, popular detection frameworks are
- * YOLO
- * SSD
- * Faster R-CNN
- 
- Support for running YOLO/DarkNet has been added to OpenCV dnn module recently. 
- 
- ## Dependencies
-  * opencv
-  * numpy
-  
-`pip install numpy opencv-python`
+Features
+Image Annotation: Draw circles, rectangles, and ovals directly on the image.
+Shape Selection: Choose between circle, rectangle, or oval shapes.
+Zoom Functionality: Zoom in and out of images for precise annotation.
+YOLO Object Detection: Perform object detection using YOLOv5 on loaded images.
+Automatic Annotation: Populate annotation fields with detected object details.<br>
+Dependencies
+PyQt5
+numpy
+opencv-python
+torch
+yolov5 <br>
+Install dependencies using:
+bash
+Copy code
+pip install numpy opencv-python torch torchvision pyqt5
+pip install 'git+https://github.com/ultralytics/yolov5.git'<br>
+Usage
+Open Image: Load an image file for annotation.
+Annotate: Draw shapes (circle, rectangle, oval) on the image.
+YOLO Object Detection: Automatically detect objects using YOLOv5.
+Submit: Save annotations in JSON format.<br>
+Example Command
+bash
+Copy code
+python yolo_annotation_tool.py
+For more details, refer to the blog post.
+<br>
+Sample Output
 
- **Command format** 
- 
- _$ python yolo_opencv.py --image /path/to/input/image --config /path/to/config/file --weights /path/to/weights/file --classes /path/to/classes/file_
- 
- Checkout the [blog post](http://www.arunponnusamy.com/yolo-object-detection-opencv-python.html) to learn more.
- 
- ### sample output :
- ![](object-detection.jpg)
- 
-Checkout the object detection implementation available in [cvlib](http:cvlib.net) which enables detecting common objects in the context through a single function call `detect_common_objects()`.
- 
- 
- (_SSD and Faster R-CNN examples will be added soon_)
+Modifications to the Code
+Improving Image Loading and Processing:
 <br>
-mainproject.py is our final project formed from the other tested prototypes(untitled1.py and untitled2.py)
+Ensure the loaded image scales correctly and is displayed in the PyQt window without distortion.
+Update the load_image method to handle image loading and resizing appropriately.
+Integrating YOLOv5 Object Detection:
 <br>
-untitled1.py deals with json storage <br>
-untitled2.py deals with yolo model
+Integrate YOLOv5 for object detection using Torch hub.
+Process detection results and update GUI with detected objects.
+Annotation Submission:
+<br>
+Enhance the submit_shape method to save annotations in JSON format.
+Use a separate module (jsonHANDLER) for managing JSON operations related to image annotations.<br>
+Error Handling and User Feedback:
+<br>
+Implement error handling for file loading and processing errors.
+Provide feedback to users through message boxes or console outputs.
+<br>
+Documentation and Comments:
+
+Add comments and documentation to methods and classes for clarity and maintainability.
+Update or add docstrings to class methods to describe their purpose and parameters.
+By incorporating these modifications, your PyQt5-based image annotation tool with YOLO object detection will be more robust and user-friendly, catering to both manual and automated image annotation tasks effectively.
