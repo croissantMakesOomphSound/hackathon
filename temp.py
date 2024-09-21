@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton,QFile
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt, QPoint
 from untitled1 import jsonHANDLER
+from untitled2 import aichecker
 
 
 class ShapeAnnotator(QMainWindow):
@@ -105,6 +106,24 @@ class ShapeAnnotator(QMainWindow):
             self.imagefile = r"{}".format(file_name)
             self.orgimg = cv2.imread(self.imagefile)
             self.img = cv2.resize(self.orgimg, (600, 600))
+            print("imagefile"+ self.imagefile)
+            aimodel=aichecker(self.imagefile)
+            aimodel.runmodel()
+            values=aimodel.resultvalues()
+            self.orgimg=aimodel.resultimg()
+            loadimage(self.orgimg)
+            self.img=cv2.resize(self.orgimg, (600, 600))
+            
+            self.name.setText(values[0])     # Set name from values[0]
+            self.name5.setText(values[1])    # Set shape from values[1]
+            self.name6.setText(values[2])    # Set description from values[2]
+            self.name1.setText(str(values[3]))  # Set xmin, converting to string
+            self.name2.setText(str(values[4]))  # Set ymin, converting to string
+            self.name3.setText(str(values[5]))  # Set xmax, converting to string
+            self.name4.setText(str(values[6]))  # Set ymax, converting to string
+
+       
+                        
 
             if self.img is None:
                 QMessageBox.critical(self, "Error", "Could not read image")
