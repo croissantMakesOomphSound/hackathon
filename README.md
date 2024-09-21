@@ -22,7 +22,7 @@ yolov5 <br>
 Install dependencies using:
 bash<br>
 Copy code<br>
-pip install numpy opencv-python torch torchvision pyqt5
+pip install numpy opencv-python torch torchvision pyqt5<br><br>
 pip install 'git+https://github.com/ultralytics/yolov5.git'<br>
 Usage<br><br>
 Open Image: Load an image file for annotation.
