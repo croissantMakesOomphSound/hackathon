@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton,QFile
 from PyQt5.QtGui import QPixmap, QImage, QIcon, QPalette, QBrush
 from PyQt5.QtCore import Qt, QPoint
 from untitled1 import jsonHANDLER
-from untitled2 import aichecker
+
 
 
 class ShapeAnnotator(QMainWindow):
