@@ -13,7 +13,7 @@ Shape Selection: Choose between circle, rectangle, or oval shapes.<br><br>
 Zoom Functionality: <br><br>Zoom in and out of images for precise annotation.<br><br>
 YOLO Object Detection: <br><br>Perform object detection using YOLOv5 on loaded images.
 Automatic Annotation: Populate annotation fields with detected object details.<br>
-Dependencies<br><br>
+<br><br>Dependencies<br><br>
 PyQt5<br>
 numpy<br>
 opencv-python<br>
