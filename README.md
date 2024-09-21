@@ -41,19 +41,20 @@ Modifications to the Code
 Improving Image Loading and Processing:
 <br>
 Ensure the loaded image scales correctly and is displayed in the PyQt window without distortion.
-Update the load_image method to handle image loading and resizing appropriately.
-<br>Integrating YOLOv5 Object Detection:
+Update the load_image method to handle image loading and resizing appropriately.<br><br>
+<br>Integrating YOLOv5 Object Detection:<br>
 <br>
 Integrate YOLOv5 for object detection using Torch hub.
-Process detection results and update GUI with detected objects.
+Process detection results and update GUI with detected objects.<br><br>
 Annotation Submission:
 <br>
 Enhance the submit_shape method to save annotations in JSON format.
 Use a separate module (jsonHANDLER) for managing JSON operations related to image annotations.<br>
+<br>
 Error Handling and User Feedback:
 <br>
 Implement error handling for file loading and processing errors.
-Provide feedback to users through message boxes or console outputs.
+Provide feedback to users through message boxes or console outputs.<br>
 <br>
 Documentation and Comments:<br>
 <br>
