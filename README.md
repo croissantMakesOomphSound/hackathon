@@ -24,7 +24,7 @@ bash<br>
 Copy code<br>
 pip install numpy opencv-python torch torchvision pyqt5<br><br>
 pip install 'git+https://github.com/ultralytics/yolov5.git'<br>
-Usage<br><br>
+<br><br>>Usage<br><br>
 Open Image: Load an image file for annotation.
 Annotate: Draw shapes (circle, rectangle, oval) on the image.
 YOLO Object Detection: Automatically detect objects using YOLOv5.
