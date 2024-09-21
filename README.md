@@ -10,7 +10,7 @@ The project combines PyQt5 for creating a graphical user interface (GUI) to anno
 Features
 Image Annotation: Draw circles, rectangles, and ovals directly on the image.
 Shape Selection: Choose between circle, rectangle, or oval shapes.<br><br>
-Zoom Functionality: Zoom in and out of images for precise annotation.
+Zoom Functionality: <br><br>Zoom in and out of images for precise annotation.
 YOLO Object Detection: Perform object detection using YOLOv5 on loaded images.
 Automatic Annotation: Populate annotation fields with detected object details.<br>
 Dependencies
