@@ -1,11 +1,12 @@
 # Coders Celtics _ Adarsh Shukla _ Tamoghna Mukherjee
-<br> Description
+<br> Description <br>
  project description and implementation using PyQt5 for annotating images with shapes and integrating YOLO object detection is quite comprehensive! Here are a few suggestions and modifications to enhance clarity and functionality:
-
+<br>
 Project Description
+<br>
 Object Detection and Image Annotation Tool using PyQt5 and YOLO
 The project combines PyQt5 for creating a graphical user interface (GUI) to annotate images with shapes (circles, rectangles, ovals) and integrates YOLO object detection for automatic object detection in images.
-
+<br>
 Features
 Image Annotation: Draw circles, rectangles, and ovals directly on the image.
 Shape Selection: Choose between circle, rectangle, or oval shapes.
@@ -13,14 +14,14 @@ Zoom Functionality: Zoom in and out of images for precise annotation.
 YOLO Object Detection: Perform object detection using YOLOv5 on loaded images.
 Automatic Annotation: Populate annotation fields with detected object details.<br>
 Dependencies
-PyQt5
-numpy
-opencv-python
-torch
+PyQt5<br>
+numpy<br>
+opencv-python<br>
+torch<br>
 yolov5 <br>
 Install dependencies using:
-bash
-Copy code
+bash<br>
+Copy code<br>
 pip install numpy opencv-python torch torchvision pyqt5
 pip install 'git+https://github.com/ultralytics/yolov5.git'<br>
 Usage
