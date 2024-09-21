@@ -1,5 +1,7 @@
 # Coders Celtics _ Adarsh Shukla _ Tamoghna Mukherjee
 this is hackathon related repository 
+<br>
+Project Methodology Description
 <br># Object detection using deep learning with OpenCV and Python 
 
 OpenCV `dnn` module supports running inference on pre-trained deep learning models from popular frameworks like Caffe, Torch and TensorFlow. 
