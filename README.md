@@ -29,20 +29,20 @@ Open Image: Load an image file for annotation.
 Annotate: Draw shapes (circle, rectangle, oval) on the image.
 YOLO Object Detection: Automatically detect objects using YOLOv5.
 Submit: Save annotations in JSON format.<br>
-Example Command
+Example Command<br>
 bash
 Copy code
 python yolo_annotation_tool.py
 For more details, refer to the blog post.
 <br>
 Sample Output
-
+<br>
 Modifications to the Code
 Improving Image Loading and Processing:
 <br>
 Ensure the loaded image scales correctly and is displayed in the PyQt window without distortion.
 Update the load_image method to handle image loading and resizing appropriately.
-Integrating YOLOv5 Object Detection:
+<br>Integrating YOLOv5 Object Detection:
 <br>
 Integrate YOLOv5 for object detection using Torch hub.
 Process detection results and update GUI with detected objects.
@@ -56,7 +56,7 @@ Implement error handling for file loading and processing errors.
 Provide feedback to users through message boxes or console outputs.
 <br>
 Documentation and Comments:
-
+<br>
 Add comments and documentation to methods and classes for clarity and maintainability.
 Update or add docstrings to class methods to describe their purpose and parameters.
 By incorporating these modifications, your PyQt5-based image annotation tool with YOLO object detection will be more robust and user-friendly, catering to both manual and automated image annotation tasks effectively.
