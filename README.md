@@ -55,7 +55,7 @@ Error Handling and User Feedback:
 Implement error handling for file loading and processing errors.
 Provide feedback to users through message boxes or console outputs.
 <br>
-Documentation and Comments:
+Documentation and Comments:<br>
 <br>
 Add comments and documentation to methods and classes for clarity and maintainability.
 Update or add docstrings to class methods to describe their purpose and parameters.
