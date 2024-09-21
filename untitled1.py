@@ -29,7 +29,11 @@ class jsonHANDLER:
           with open(f"{self.imagename}.json", "w") as json_file:
              json.dump(data, json_file, indent=4)
              print("JSON success")
+             print("JSON Output:")
+             print(json.dumps(data, indent=4))
+             return json.dumps(data, indent=4)
         except Exception:
             print("FAILED")
             traceback.print_exc()
+            return
                   
