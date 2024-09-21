@@ -1,6 +1,7 @@
 import sys
 import cv2
 import numpy as np
+import torch
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton,QFileDialog, QVBoxLayout,QHBoxLayout,QFormLayout, QWidget, QMessageBox,QLineEdit,QScrollArea,QTextEdit
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt, QPoint
@@ -15,7 +16,7 @@ class ShapeAnnotator(QMainWindow):
         self.start_point = None
         self.shape = 'circle'
         self.shapes = []  # List to store drawn shapes
-        self.setGeometry(100, 100, 1200, 800)
+        self.setGeometry(100, 100, 700, 2200)
         
         # Create a central widget
         self.central_widget = QWidget(self)
@@ -96,7 +97,6 @@ class ShapeAnnotator(QMainWindow):
 
         self.img = None  # Store the loaded image
 
-
     def open_image(self):
         options = QFileDialog.Options()
         file_name, _ = QFileDialog.getOpenFileName(self, "Open Image File", "",
@@ -106,44 +106,50 @@ class ShapeAnnotator(QMainWindow):
             self.imagefile = r"{}".format(file_name)
             self.orgimg = cv2.imread(self.imagefile)
             self.img = cv2.resize(self.orgimg, (600, 600))
-            print("imagefile"+ self.imagefile)
-            aimodel=aichecker(self.imagefile)
-            aimodel.runmodel()
-            values=aimodel.resultvalues()
-            self.orgimg=aimodel.resultimg()
-            loadimage(self.orgimg)
-            self.img=cv2.resize(self.orgimg, (600, 600))
             
-            self.name.setText(values[0])     # Set name from values[0]
-            self.name5.setText(values[1])    # Set shape from values[1]
-            self.name6.setText(values[2])    # Set description from values[2]
-            self.name1.setText(str(values[3]))  # Set xmin, converting to string
-            self.name2.setText(str(values[4]))  # Set ymin, converting to string
-            self.name3.setText(str(values[5]))  # Set xmax, converting to string
-            self.name4.setText(str(values[6]))  # Set ymax, converting to string
-
-       
-                        
-
-            if self.img is None:
-                QMessageBox.critical(self, "Error", "Could not read image")
-                return
-
+            # Model inference
+            model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+            results = model(self.img)  # Use self.img here
+            
+            # Process results
+            self.process_results(results)
             self.update_image()
+    def process_results(self, results):
+    # Get predictions
+        predictions_tensor = results.xyxy[0]  # img1 predictions (tensor)
+    
+    # Clear previous shapes
+        self.shapes.clear()
+
+    # Draw boxes on the image and store shapes
+        img_with_boxes = self.img.copy()  # Copy the original image for drawing
+        for pred in predictions_tensor:
+            xmin, ymin, xmax, ymax, conf, cls = pred.tolist()  # Convert tensor to list
+            class_name = results.names[int(cls)]  # Get class name from the model
+
+            # Create a shape for the bounding box
+            self.shapes.append((class_name, (xmin, ymin), (xmax, ymax)))
+
+            # Draw bounding box on the image
+            cv2.rectangle(img_with_boxes, (int(xmin), int(ymin)), (int(xmax), int(ymax)), (0, 255, 0), 2)
+
+            # Update the input fields with predictions
+            self.name.setText(class_name)
+            self.name1.setText(str(int(xmin)))
+            self.name2.setText(str(int(ymin)))
+            self.name3.setText(str(int(xmax)))
+            self.name4.setText(str(int(ymax)))
+            self.name5.setText("rectangle")  # Assuming bounding boxes are rectangles
+            self.name6.setPlainText("Detected object")  # Example description
+
+        # Set the processed image with bounding boxes
+        self.img = img_with_boxes
+
 
     def load_image(self, file_name):
         pixmap = QPixmap(file_name)
         self.image_label.setPixmap(pixmap)
         self.image_label.adjustSize()  # Adjust size to fit the scroll area
-
-    def wheelEvent(self, event):
-        # Zoom in/out with the mouse wheel
-        if event.angleDelta().y() > 0:
-            self.scale_factor *= 1.1
-        else:
-            self.scale_factor /= 1.1
-        self.image_label.setPixmap(self.image_label.pixmap().scaled(self.image_label.pixmap().size() * self.scale_factor,
-                                                                     Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
     def update_image(self):
         """Redraw all shapes on the image and update the QLabel."""
@@ -213,6 +219,7 @@ class ShapeAnnotator(QMainWindow):
             axes = (abs(start_x - end_x) // 2, abs(start_y - end_y) // 2)
             cv2.ellipse(img_copy, center, axes, 0, 0, 360, (255, 0, 0), thickness=2)
 
+
         self.name1.setText(str(xmin))
         self.name2.setText(str(ymin))
         self.name3.setText(str(xmax))
@@ -249,3 +256,4 @@ if __name__ == '__main__':
     window = ShapeAnnotator()
     window.show()
     sys.exit(app.exec_())
+
