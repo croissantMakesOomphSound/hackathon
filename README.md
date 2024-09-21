@@ -1,6 +1,6 @@
 # Coders Celtics _ Adarsh Shukla _ Tamoghna Mukherjee
 <br> Description <br>
- Implementation using PyQt5 for annotating images with shapes and integrating YOLO object detection is quite comprehensive! Here are a few suggestions and modifications to enhance clarity and functionality:
+ Implementation using PyQt5 for annotating images with shapes and integrating YOLO object detection is quite comprehensive! Here are a few approaches to enhance clarity and functionality:
 <br>
 Project Description
 <br>
