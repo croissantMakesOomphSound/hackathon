@@ -1,0 +1,15 @@
+{
+    "image_name": "person",
+    "image_link": "C:/Users/TMpub/OneDrive/Desktop/WhatsApp Image 2025-09-15 at 21.10.58_29c3e288.jpg",
+    "annotations": [
+        {
+            "name": "person",
+            "shape": "circle",
+            "desc": "Detected object",
+            "xmin": "121",
+            "xmax": "358",
+            "ymin": "367",
+            "ymax": "373"
+        }
+    ]
+}

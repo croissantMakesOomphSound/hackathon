@@ -29,7 +29,7 @@ class ShapeAnnotator(QMainWindow):
         self.resizing = False
         self.handle_radius = 5  # For resizing handle
         
-        self.setup_background()
+        
         
         # Create a central widget
         self.central_widget = QWidget(self)
@@ -142,10 +142,32 @@ class ShapeAnnotator(QMainWindow):
         
         self.img = None  # Store the loaded image
         self.original_pixmap = None  # Store the original pixmap
+        self.setup_background()
+        
+    def load_image(self, file_name):
+        pixmap = QPixmap(file_name)
+        self.original_pixmap = pixmap  
+        self.image_label.setPixmap(pixmap)
+        self.image_label.adjustSize()  # Adjust size to fit the scroll area
+        self.scale_factor = 1.0
+    
+    def zoom_in(self):
+        self.scale_image(1.25)
+
+    def zoom_out(self):
+        self.scale_image(0.8)
+
+    def scale_image(self, factor):
+        if self.original_pixmap:
+            self.scale_factor *= factor
+            new_size = self.original_pixmap.size() * self.scale_factor
+            scaled_pixmap = self.original_pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.image_label.setPixmap(scaled_pixmap)
+            self.image_label.adjustSize()
 
     
     def setup_background(self):
-        background_path = r"C:\Users\TMpub\OneDrive\Desktop\AI-based-annotation-system\images\welcome"
+        background_path = r"C:\Users\TMpub\OneDrive\Desktop\AI-based-annotation-system\images\welcome.png"
         if not os.path.exists(background_path):
             print(f"Error: Background image not found at {background_path}")
             return
@@ -158,16 +180,15 @@ class ShapeAnnotator(QMainWindow):
 
         # Scale the background image to the size of the window
         scaled_background = background.scaled(self.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
-
-        # Create a palette and set it as the window's background
-        palette = QPalette()
-        palette.setBrush(QPalette.Window, QBrush(scaled_background))
-        self.setPalette(palette)
-
-    def resizeEvent(self, event):
-        # Resize the background image when the window is resized
-        super().resizeEvent(event)
-        self.setup_background()
+        bgpixmap = QPixmap(scaled_background) 
+        self.original_pixmap=bgpixmap
+        self.scale_factor *= 0.25
+        new_size = self.original_pixmap.size() * self.scale_factor
+        scaled_pixmap = self.original_pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.image_label.setPixmap(scaled_pixmap)
+        self.image_label.adjustSize()
+        
+   
     
 
     def open_image(self):
@@ -236,26 +257,7 @@ class ShapeAnnotator(QMainWindow):
                     print(f"Selected annotation: {shape_type} at {start} to {end}")
                     break  # Stop checking after the first match
 
-    def load_image(self, file_name):
-        pixmap = QPixmap(file_name)
-        self.original_pixmap = pixmap  
-        self.image_label.setPixmap(pixmap)
-        self.image_label.adjustSize()  # Adjust size to fit the scroll area
-        self.scale_factor = 1.0
     
-    def zoom_in(self):
-        self.scale_image(1.25)
-
-    def zoom_out(self):
-        self.scale_image(0.8)
-
-    def scale_image(self, factor):
-        if self.original_pixmap:
-            self.scale_factor *= factor
-            new_size = self.original_pixmap.size() * self.scale_factor
-            scaled_pixmap = self.original_pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-            self.image_label.setPixmap(scaled_pixmap)
-            self.image_label.adjustSize()
     
     def update_image(self):
         if self.img is None:
