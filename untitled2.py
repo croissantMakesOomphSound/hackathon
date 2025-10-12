@@ -4,7 +4,7 @@ Created on Sat Sep 21 00:56:08 2024
 
 @author: TMpub
 """
-######## deprecated already merged with temp.py########
+######## deprecated already merged with mainproject.py########
 import torch
 import json
 from untitled1 import jsonHANDLER

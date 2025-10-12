@@ -1,0 +1,32 @@
+{
+    "image_link": "C:/Users/TMpub/OneDrive/Desktop/AI-based-annotation-system/images/apple.jpeg",
+    "annotations": [
+        {
+            "name": "apple",
+            "shape": "circle",
+            "desc": "red",
+            "xmin": "139",
+            "xmax": "397",
+            "ymin": "224",
+            "ymax": "477"
+        },
+        {
+            "name": "wick",
+            "shape": "rectangle",
+            "desc": "black",
+            "xmin": "269",
+            "xmax": "306",
+            "ymin": "69",
+            "ymax": "173"
+        },
+        {
+            "name": "leaves",
+            "shape": "oval",
+            "desc": "green single",
+            "xmin": "304",
+            "xmax": "454",
+            "ymin": "25",
+            "ymax": "139"
+        }
+    ]
+}

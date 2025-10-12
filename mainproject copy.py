@@ -143,7 +143,8 @@ class ShapeAnnotator(QMainWindow):
         self.img = None  # Store the loaded image
         self.original_pixmap = None  # Store the original pixmap
         self.setup_background()
-        
+        self.imagefile=None
+        self.newImageAnnotatation = None
     def load_image(self, file_name):
         pixmap = QPixmap(file_name)
         self.original_pixmap = pixmap  
@@ -202,15 +203,23 @@ class ShapeAnnotator(QMainWindow):
             self.img = cv2.resize(self.orgimg, (600, 600))
             
             
+            
+            self.newImageAnnotatation = jsonHANDLER(self.imagefile)
+            print("image annotation decalred")
+            
+            
             # Model inference
             model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
             results = model(self.img)  # Use self.img here
+            
+            
             
             # Process results
             self.process_results(results)
             print("process results called")
             self.update_image()
             print("update image called")
+            
 
     def process_results(self, results):
         # Get predictions
@@ -240,24 +249,11 @@ class ShapeAnnotator(QMainWindow):
             self.name4.setText(str(int(ymax)))
             self.name5.setText("rectangle")  # Assuming bounding boxes are rectangles
             self.name6.setPlainText("Detected object")  # Example description
-            print("Processing REsults inside::"+name+name1+name2+name3+name4+name5)
+            
         # Set the processed image with bounding boxes
         self.img = img_with_boxes  
 
-    def mouseDoubleClickEvent(self, event):
-        if event.button() == Qt.LeftButton and self.img is not None:
-            click_position = QPoint(event.pos().x() - self.image_label.x(), event.pos().y() - self.image_label.y())
-        
-            for index, shape_info in enumerate(self.shapes):
-                shape_type, start, end = shape_info
-                
-                if self.is_point_within_shape(click_position, start, end):
-                    self.selected_shape = shape_info
-                    self.selected_shape_index = index
-                    print(f"Selected annotation: {shape_type} at {start} to {end}")
-                    break  # Stop checking after the first match
-
-    
+       
     
     def update_image(self):
         if self.img is None:
@@ -385,11 +381,11 @@ class ShapeAnnotator(QMainWindow):
         ymax = self.name4.text()
         shape = self.name5.text()
         desc = self.name6.toPlainText() 
-        imagefile = self.imagefile
-        
-        newImageAnnotatation = jsonHANDLER(name, imagefile)
-        newImageAnnotatation.createannoatation(name, shape, desc, xmin, ymin, xmax, ymax)
-        self.name8.setText(newImageAnnotatation.createjson())
+               
+        if self.newImageAnnotatation:
+            print("true in submit")
+            self.newImageAnnotatation.createannoatation(name, shape, desc, xmin, ymin, xmax, ymax)
+            self.name8.setText(self.newImageAnnotatation.createjson())
 
 
 if __name__ == '__main__':
